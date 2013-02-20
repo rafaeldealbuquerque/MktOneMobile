@@ -1,26 +1,39 @@
-body
+   
+#btnAdd, #btnCreate, #btnCancel, #btnBack
 {
-    font: Arial, sans-serif;
+	display: block;
+	line-height: 2em;
+	text-align: center;
 }
-
-.buttonArea,
-.footerText,
-#geoLocationContainer,
-#helloWorldInput,
-#helloWorldText
+        
+#btnAdd
 {
-    text-align: center;
+	margin: 2em;
 }
-
-#txtName
+        
+#btnCreate, #btnCancel
 {
-    border: 1px solid #AAA;
-    border-radius: 15px;
-    position:static;
-    margin-left: 1em;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
-    background:white;
-    color: black;
-    padding: 7px;
+	margin: 1em auto 0 auto;
+	width: 80%;
+}
+        
+#btnCreate
+{
+	background-color: #00FF00;
+}
+        
+#btnCancel
+{
+	background-color: #FF0000;
+}
+        
+#btnBack
+{
+	margin: 2em auto;
+	width: 50%;
+}
+        
+.btnActions
+{
+	float: right;
 }

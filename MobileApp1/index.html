@@ -1,67 +1,207 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title></title>
-        <meta charset="utf-8" />
-        <script src="cordova.js"></script>
-        <script src="kendo/js/jquery.min.js"></script>
-        <script src="kendo/js/kendo.mobile.min.js"></script>
-        <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-        <script src="scripts/hello-world.js"></script>
+	<head>
+		<title>Mobile App 1</title>
+		<meta charset="utf-8" />
+		<script src="cordova.js"></script>
 
-        <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
-        <link href="styles/main.css" rel="stylesheet" />
-    </head>
-    <body>
-        <div data-role="view" id="tabstrip-home" data-title="Hello World!">
-            <h1>Welcome!</h1>
-            <p>
-                Icenium&trade; enables you to build cross-platform device applications regardless of your 
-                development platform by combining the convenience of a local development toolset with the 
-                power and flexibility of the cloud.
-            </p>
-        </div>
+		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
-        <div data-role="view" id="tabstrip-uiinteraction" data-title="UI Interaction">
-            <h1>Say Hello!</h1>
-            <div id='helloWorldInput'>
-                <label for="txtName" style="display: inline-block;">Enter your name:</label>
-                <input type="text" id="txtName" value="" />
-            </div>
-            <div id='helloWorldText' style="display:block;"></div>
-            <div class="buttonArea">
-                <a id="resetButton" data-role="button" data-click="sayHelloReset" data-icon="refresh">Reset</a>
-                <a id="submitButton" data-role="button" data-click="sayHello" data-icon="compose">Submit</a>
-            </div>
-        </div>
+		<script src="kendo/js/jquery.min.js"></script>
+		<script src="kendo/js/kendo.all.min.js"></script>
 
-        <div data-role="view" id="tabstrip-geolocation" data-title="Geolocation">
-            <h1>My Location</h1>
-            <div id="geoLocationContainer">
-                <div id="myLocation">Unable to get location information. Please check your network connection and try again.</div>
-                <a id="refreshMap" data-role="button" data-click="getLocation" data-icon="refresh">Refresh Location</a>
-                <div id="map_canvas"></div>
-            </div>
-        </div>
+	</head>
+	<body>
 
-        <div data-role="layout" data-id="mobile-tabstrip">
-            <header data-role="header">
-                <div data-role="navbar">
-                    <span data-role="view-title"></span>
-                </div>
-            </header>
+		<!--main view-->
+		<div id="main" data-role="view" data-title="Products List" data-model="viewModel" data-layout="default">
+			<a id="btnAdd" data-role="button" data-icon="add" data-bind="events: { click: addProduct }">Add Product</a>
+			<ul id="products" data-role="listview" data-template="productItem" data-style="inset" data-bind="source: dataSource"></ul>
 
-            <div data-role="footer">
-                <div data-role="tabstrip">
-                    <a href="#tabstrip-home" data-icon="home">Home</a>
-                    <a href="#tabstrip-uiinteraction" data-icon="share">UI Interaction</a>
-                    <a href="#tabstrip-geolocation" data-icon="globe">Geolocation</a>
-                </div>
-            </div>
-        </div>
+			<ul id="actions" data-role="actionsheet">
+				<li class="km-actionsheet-title">Select operation:</li>
+				<li>
+					<a href="#" data-action="viewModel.showDetails">Details</a>
+				</li>
+				<li>
+					<a href="#" data-action="viewModel.editProduct">Edit</a>
+				</li>
+				<li>
+					<a href="#" data-action="viewModel.destroyProduct">Delete</a>
+				</li>
+			</ul>
+		</div>
 
-        <script>
-            var app = new kendo.mobile.Application(document.body, { transition: "slide", layout: "mobile-tabstrip" });
-        </script>
-    </body>
+		<!--listview template-->
+		<script id="productItem" type="text/x-kendo-template">
+			<span>#= ProductName #</span>
+			<a class="btnActions"
+			   data-role="button"
+			   data-rel="actionsheet"
+			   href="\\#actions"
+			   data-actionsheet-context="#= ProductID #">Actions</a>
+		</script>
+
+		<!--editor-->
+		<div id="editor" data-role="view" data-init="editorViewInit" data-model="viewModel" data-title="Edit Product Information" data-layout="default">
+			<ul id="form" data-role="listview" data-style="inset">
+				<li>
+					<label>
+						Product Name:
+						<input id="productName" name="ProductName" type="text" required="required" data-bind="value: selectedProduct.ProductName" />
+					</label>
+				</li>
+				<li>
+					<label>
+						Unit Price:
+						<input id="unitPrice" name="UnitPrice" type="number" required="required" data-bind="value: selectedProduct.UnitPrice" />
+					</label>
+				</li>
+				<li>
+					<label>
+						Units in stock:
+						<input id="unitsInStock" name="UnitsInStock" type="number" required="required" data-bind="value: selectedProduct.UnitsInStock"/>
+					</label>
+				</li>
+				<li>
+					<label>
+						Discontinued:
+						<input id="discontinued" name="Discontinued" type="checkbox" data-bind="value: selectedProduct.Discontinued"/>
+					</label>
+				</li>
+			</ul>
+			<a id="btnCreate" data-role="button" type="button" data-bind="events: {click: saveProduct}">Save</a>
+			<a id="btnCancel" data-role="button" type="button" data-bind="events: {click: cancelChanges}">Cancel</a>
+		</div>
+
+		<!--details view-->
+		<div id="details" data-role="view" data-model="viewModel.selectedProduct" data-title="Details" data-layout="default">
+			<ul id="info" data-role="listview" data-style="inset">
+				<li>
+					Product Name: <span data-bind="text: ProductName"></span>
+				</li>
+				<li>
+					Unit Price: <span data-bind="text: UnitPrice"></span>
+				</li>
+				<li>
+					Units in stock: <span data-bind="text: UnitsInStock"></span>
+				</li>
+				<li>
+					<label>
+						Discontinued: <span data-bind="text: Discontinued"></span>
+					</label>
+				</li>
+			</ul>
+
+			<a id="btnBack" data-role="button" href="#:back">Back</a>
+		</div>
+
+		<!--layout-->
+		<div data-role="layout" data-id="default">
+			<div data-role="header">
+				<div data-role="navbar">
+					<span data-role="view-title"></span>
+				</div>
+			</div>
+			<div data-role="footer">
+				<!--footer content-->
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var app = new kendo.mobile.Application(),
+			validator,
+			crudServiceBaseUrl = "http://localhost:50000/api",
+			viewModel = kendo.observable({
+				dataSource: new kendo.data.DataSource({
+					transport: {
+						read:  {
+							url: crudServiceBaseUrl + "/Products",
+							dataType: "json",
+							type:"GET"
+						},
+						update: {
+							url: crudServiceBaseUrl + "/Products",
+							dataType: "json",
+							type:"PUT"
+						},
+						destroy: {
+							url: crudServiceBaseUrl + "/Products",
+							dataType: "json",
+                            type:"DELETE"
+						},
+						create: {
+							url: crudServiceBaseUrl + "/Products",
+							dataType: "json",
+							type:"POST"
+						},
+						parameterMap: function(options, operation) {
+							if (operation !== "read" && options.models) {
+								return {models: kendo.stringify(options.models)};
+							}
+						}
+					},
+					batch: true,
+					pageSize: 20,
+					schema: {
+						model: {
+							id: "ProductID",
+							fields: {
+								ProductID: { editable: false, nullable: true },
+								ProductName: { type: "string" },
+								UnitPrice: { type: "number" },
+								Discontinued: { type: "boolean" },
+								UnitsInStock: { type: "number" }
+							}
+						}
+					}
+				}),
+				addProduct: function() {
+					var newProduct = this.dataSource.add(); //adds a new data item to the DataSource
+					this.set("selectedProduct", newProduct); //sets the selected product
+					app.navigate("#editor"); //navigates to editor view
+				},
+				selectedProduct: {},
+				saveProduct: function() {
+					if (validator.validate()) { //validates the input
+						this.dataSource.sync(); //synchronizes changes through the transport
+						app.navigate("#main"); //navigates to main view
+					}
+				},
+				cancelChanges: function() {
+					this.dataSource.cancelChanges(); //cancels the changes made to the DataSource after the last sync
+					app.navigate("#main"); //navigates to main view
+				},
+				editProduct: function(e) {
+					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+					viewModel.set("selectedProduct", product);  //sets the selected product
+					app.navigate("#editor"); //navigates to editor view
+				},
+				destroyProduct: function(e) {
+					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+					viewModel.dataSource.remove(product); //removes the product from the DataSource
+					viewModel.dataSource.sync(); //synchronizes changes through the transport
+				},
+				showDetails: function(e) {
+					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+					viewModel.set("selectedProduct", product); //sets the selected product
+					app.navigate("#details"); //navigates to details view
+				}
+			});
+        
+			function editorViewInit(e) {
+				validator = $("#form").kendoValidator({ //initialize the validator
+					messages: {
+						required: function(input) { //create a custom message function
+							input.attr("placeholder", input.attr("name") + " is required");
+						}
+					}
+				}).data("kendoValidator");
+			}
+
+		</script>
+
+	</body>
+
 </html>
+

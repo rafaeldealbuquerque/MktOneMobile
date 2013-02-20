@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mobile App 1</title>
+		<meta charset="utf-8" />
+		<script src="cordova.js"></script>
+
+		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+
+		<script src="kendo/js/jquery.min.js"></script>
+		<script src="kendo/js/kendo.all.min.js"></script>
+
+	</head>
+	<body>
+
+		<div data-role="view" data-layout="app" data-title="info" id="info">
+			<div id="news">Novas notícias aqui</div>
+		</div>
+		<div data-role="view" data-layout="app" data-init="getProducts" data-title="schedule" id="schedule">
+			<ul id="sessions"></ul>
+		</div>
+		<div data-role="layout" data-id="app">
+			<header data-role="header">
+				<div data-role="navbar">Conference Tracker</div>
+			</header>
+			<footer data-role="footer">
+				<div data-role="tabstrip">
+					<a href="#schedule" data-icon="recents">Schedule</a>
+                    <a href="#info" data-icon="info">Info</a>					
+				</div>
+			</footer>
+		</div>
+
+		<script type="text/x-kendo-template" id="sessionsTemplate">
+			<div class="left">
+				<div class='item-info'>${ ProductId } - ${ProductName} - R$ ${UnitPrice}</div>
+				
+			</div>			
+		</script>
+
+		<script>
+			// creates the application UI
+			var application = new kendo.mobile.Application();
+
+			/*
+			var getInfo = function() {
+			// read from the remote data source
+			$.get("infos.json", function(data) {
+			$.each(data, function() {
+			$("#news").append("<p class='info'>" + this.content + "</p>");
+			});
+			});
+			}
+			*/
+			
+			var getProducts = function() {
+				$("#sessions").kendoMobileListView({
+					dataSource: kendo.data.DataSource.create({ 
+						transport: {
+							read: "http://localhost:59232/api/products"
+						},
+						//group: "ProductName",
+						sort: { field: "ProductId", dir: "asc" }
+					}),
+					template: $("#sessionsTemplate").html()
+				});
+			}
+
+		</script>
+
+	</body>
+
+</html>
+

@@ -57,8 +57,12 @@
     <Resource Include="App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="About.html" />
+    <Content Include="ApiFunciona1.html" />
+    <Content Include="HelloWorld.html" />
     <Content Include="index.html" />
     <Content Include="kendo\js\jquery.min.js" />
+    <Content Include="kendo\js\kendo.all.min.js" />
     <Content Include="kendo\js\kendo.mobile.min.js" />
     <Content Include="kendo\styles\images\back.png" />
     <Content Include="kendo\styles\images\KendoUI.ttf" />
