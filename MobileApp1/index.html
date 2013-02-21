@@ -120,50 +120,61 @@
 						read:  {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"GET",
-							contentType: 'application/json;charset=utf-8'  
+                            
 						},
 						update: {
 							url: crudServiceBaseUrl + "/Products",							
-							type:"PUT",
-							contentType: 'application/json;charset=utf-8'  
+							type:"PUT"           
 						},
 						destroy: {
 							url: crudServiceBaseUrl + "/Products",							
-							type:"DELETE"                            ,
-							contentType: 'application/json;charset=utf-8'  
+							type:"DELETE"
 						},
 						create: {
 							url: crudServiceBaseUrl + "/Products",							
-							type:"POST",
-							contentType: 'application/json;charset=utf-8'  
+							type:"POST"
+							//,
+							//contentType: 'application/json;charset=utf-8'  
 						},
+						
+						/*
 						parameterMap: function(data, operation) {
-							if (operation !== "read" && options.models) {
-								// post the products so the ASP.NET DefaultModelBinder will understand them:
-								// products[0].Name="name"
-								// products[0].ProductID =1
-								// products[1].Name="name"
-								// products[1].ProductID =1
-								var result = {};
+						if (operation !== "read" && data.models) {
+						// post the products so the ASP.NET DefaultModelBinder will understand them:
+						// products[0].Name="name"
+						// products[0].ProductID =1
+						// products[1].Name="name"
+						// products[1].ProductID =1
+						var result = {};
 			
-								for (var i = 0; i < data.models.length; i++) {
-									var product = data.models[i];
+						for (var i = 0; i < data.models.length; i++) {
+						var product = data.models[i];
 			
-									for (var member in product) {
-										result["products[" + i + "]." + member] = product[member];
-									}
-								}
+						for (var member in product) {
+						result["products[" + i + "]." + member] = product[member];
+						}
+						}
 			
-								return result;
-							}
-							else {
-								return JSON.stringify(data)
+						return result;
+						}
+						else {
+						return JSON.stringify(data)
+						}
+						}
+						*/
+                        
+						
+						parameterMap: function(data, operation) {
+							if (operation !== "read" && data.models) {
+								return {products: kendo.stringify(data.models)};
 							}
 						}
+						
+                        
 					},
 					batch: true,
 					pageSize: 20,
-					schema: {
+					schema: {          
 						model: {
 							id: "ProductID",
 							fields: {
@@ -220,8 +231,8 @@
 			}
 			
 		</script>
-			
+
 	</body>
-			
+
 </html>
-		
+
