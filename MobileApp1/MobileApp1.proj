@@ -11,6 +11,9 @@
     <DeviceOrientations>Portrait;Landscape</DeviceOrientations>
     <iOSStatusBarStyle>Default</iOSStatusBarStyle>
     <AndroidHardwareAcceleration>false</AndroidHardwareAcceleration>
+    <BundleVersion>1.0</BundleVersion>
+    <iOSDisplayName />
+    <AndroidVersionCode>1</AndroidVersionCode>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="App_Resources" />
@@ -32,6 +35,7 @@
     <Folder Include="App_Resources\Android\drawable-nodpi">
       <Platform>Android</Platform>
     </Folder>
+    <Folder Include="Testes" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App_Resources\iOS\icon.png" />
@@ -57,9 +61,9 @@
     <Resource Include="App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.html" />
-    <Content Include="ApiFunciona1.html" />
-    <Content Include="HelloWorld.html" />
+    <Content Include="Testes\About.html" />
+    <Content Include="Testes\ApiFunciona1.html" />
+    <Content Include="Testes\HelloWorld.html" />
     <Content Include="index.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.all.min.js" />
@@ -78,6 +82,22 @@
       <Platform>Android</Platform>
       <TargetName>cordova.js</TargetName>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <CordovaPlugin Include="com.phonegap.plugins.sqlite">
+      <Version>0.0.1</Version>
+      <Name>SQLite</Name>
+    </CordovaPlugin>
+  </ItemGroup>
+  <ItemGroup>
+    <CordovaPluginContent Include="com.phonegap.plugins.sqlite\Android\SQLitePlugin.js">
+      <Platform>Android</Platform>
+      <TargetName>SQLitePlugin.js</TargetName>
+    </CordovaPluginContent>
+    <CordovaPluginContent Include="com.phonegap.plugins.sqlite\iOS\SQLitePlugin.js">
+      <Platform>iOS</Platform>
+      <TargetName>SQLitePlugin.js</TargetName>
+    </CordovaPluginContent>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Telerik\ICE\Tools\Mobile\MobileTools.targets" />
 </Project>
