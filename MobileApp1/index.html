@@ -16,21 +16,22 @@
 	<body>
 
 		<!--main view-->
-		<div id="main" data-role="view" data-title="Products List" data-model="viewModel" data-layout="default">
-			<a id="btnAdd" data-role="button" data-icon="add" data-bind="events: { click: addProduct }">Add Product</a>
+		<div id="main" data-role="view" data-title="Lista de Produtos" data-model="viewModel" data-layout="default">
+			<a id="btnAdd" data-role="button" data-icon="add" data-bind="events: { click: addProduct }">Adicionar Produto</a>
 			<ul id="products" data-role="listview" data-template="productItem" data-style="inset" data-bind="source: dataSource"></ul>
 
-			<ul id="actions" data-role="actionsheet">
-				<li class="km-actionsheet-title">Select operation:</li>
+			<ul id="actions" data-role="actionsheet" data-cancel="Cancelar">
+				<li class="km-actionsheet-title">Selecione operação:</li>
 				<li>
-					<a href="#" data-action="viewModel.showDetails">Details</a>
+					<a href="#" data-action="viewModel.showDetails">Detalhes</a>
 				</li>
 				<li>
-					<a href="#" data-action="viewModel.editProduct">Edit</a>
+					<a href="#" data-action="viewModel.editProduct">Editar</a>
 				</li>
 				<li>
-					<a href="#" data-action="viewModel.destroyProduct">Delete</a>
+					<a href="#" data-action="viewModel.destroyProduct">Deletar</a>
 				</li>
+				
 			</ul>
 		</div>
 
@@ -40,62 +41,63 @@
 			<a class="btnActions"
 			   data-role="button"
 			   data-rel="actionsheet"
+                
 			   href="\\#actions"
-			   data-actionsheet-context="#= ProductID #">Actions</a>
+			   data-actionsheet-context="#= ProductID #">Ações</a>
 		</script>
 
 		<!--editor-->
-		<div id="editor" data-role="view" data-init="editorViewInit" data-model="viewModel" data-title="Edit Product Information" data-layout="default">
+		<div id="editor" data-role="view" data-init="editorViewInit" data-model="viewModel" data-title="Editar produto" data-layout="default">
 			<ul id="form" data-role="listview" data-style="inset">
 				<li>
 					<label>
-						Product Name:
+						Nome do produto:
 						<input id="productName" name="ProductName" type="text" required="required" data-bind="value: selectedProduct.ProductName" />
 					</label>
 				</li>
 				<li>
 					<label>
-						Unit Price:
+						Preço Unitário:
 						<input id="unitPrice" name="UnitPrice" type="number" required="required" data-bind="value: selectedProduct.UnitPrice" />
 					</label>
 				</li>
 				<li>
 					<label>
-						Units in stock:
+						Qtde Estoque:
 						<input id="unitsInStock" name="UnitsInStock" type="number" required="required" data-bind="value: selectedProduct.UnitsInStock"/>
 					</label>
 				</li>
 				<li>
 					<label>
-						Discontinued:
+						Inativo:
 						<input id="discontinued" name="Discontinued" type="checkbox" data-bind="value: selectedProduct.Discontinued"/>
 					</label>
 				</li>
 			</ul>
-			<a id="btnCreate" data-role="button" type="button" data-bind="events: {click: saveProduct}">Save</a>
-			<a id="btnCancel" data-role="button" type="button" data-bind="events: {click: cancelChanges}">Cancel</a>
+			<a id="btnCreate" data-role="button" type="button" data-bind="events: {click: saveProduct}">Salvar</a>
+			<a id="btnCancel" data-role="button" type="button" data-bind="events: {click: cancelChanges}">Cancelar</a>
 		</div>
 
 		<!--details view-->
-		<div id="details" data-role="view" data-model="viewModel.selectedProduct" data-title="Details" data-layout="default">
+		<div id="details" data-role="view" data-model="viewModel.selectedProduct" data-title="Detalhes" data-layout="default">
 			<ul id="info" data-role="listview" data-style="inset">
 				<li>
-					Product Name: <span data-bind="text: ProductName"></span>
+					Nome do Produto: <span data-bind="text: ProductName"></span>
 				</li>
 				<li>
-					Unit Price: <span data-bind="text: UnitPrice"></span>
+					Preço Unitário: <span data-bind="text: UnitPrice"></span>
 				</li>
 				<li>
-					Units in stock: <span data-bind="text: UnitsInStock"></span>
+					Qtde Estoque: <span data-bind="text: UnitsInStock"></span>
 				</li>
 				<li>
 					<label>
-						Discontinued: <span data-bind="text: Discontinued"></span>
+						Inativo: <span data-bind="text: Discontinued"></span>
 					</label>
 				</li>
 			</ul>
 
-			<a id="btnBack" data-role="button" href="#:back">Back</a>
+			<a id="btnBack" data-role="button" href="#:back">Voltar</a>
 		</div>
 
 		<!--layout-->
@@ -140,8 +142,7 @@
 							url: crudServiceBaseUrl + "/Products"													
 							,type:"POST"                            
 							,contentType: "application/json"
-							,dataType: "json"                            
-							
+							,dataType: "json" 
 						},
 						
 						/*
@@ -170,15 +171,14 @@
 						}
 						*/
 						
-						/*
+						
 						parameterMap: function(data, operation) {
-						if (operation !== "read" && data.models) {
-						return {products: kendo.stringify(data.models)};
+							if (operation !== "read" && data.models) {
+								return kendo.stringify([data.models[0]]);
+							}
 						}
-						}
-						*/
-                        
-						/*
+						
+						/*		
 						parameterMap: function (data, operation) {
 						if (operation == "update" || operation == "create") {
 						if (data.models[0].ProductId == null && operation != "destroy") {
@@ -187,32 +187,27 @@
 						else {
 						operation = "update";
 						}
-						return kendo.stringify({ Products: data.models[0] });
+						return kendo.stringify([data.models[0]]);
 						}
 						else if (operation == "destroy") {
-						return kendo.stringify({ Products: data.models[0] });
+						return kendo.stringify([data.models[0]]);
 						}
 						}
 						*/
-                        
-						parameterMap: function (options) {
-							return JSON.stringify({ process: 'getcachedcontacts' });
-						}
-			
-			
 					},
+                    
 					batch: true,
-					pageSize: 5,
-					schema: {          
+					//pageSize: 5,
+					schema: { 
 						model: {
-							id: "ProductId",
+							id: "ProductID",
 							fields: {
 								ProductId: { editable: false, nullable: true },
 								ProductName: { validation: { required: true} },
 								UnitPrice: { type: "number", validation: { required: true, min: 1, max: 999} },
 								Discontinued: { type: "boolean" },
 								UnitsInStock: { type: "number", validation: { min: 0, required: true} }
-							}                    
+							} 
 						}
 					}
 				}),
