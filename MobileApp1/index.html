@@ -178,22 +178,26 @@
 						}
 						*/
                         
-                        
+						/*
 						parameterMap: function (data, operation) {
-							if (operation == "update" || operation == "create") {
-								if (data.models[0].ProductId == null && operation != "destroy") {
-									operation = "create";
-								}
-								else {
-									operation = "update";
-								}
-								return kendo.stringify({ Products: data.models[0] });
-							}
-							else if (operation == "destroy") {
-								return kendo.stringify({ Products: data.models[0] });
-							}
+						if (operation == "update" || operation == "create") {
+						if (data.models[0].ProductId == null && operation != "destroy") {
+						operation = "create";
 						}
-			                
+						else {
+						operation = "update";
+						}
+						return kendo.stringify({ Products: data.models[0] });
+						}
+						else if (operation == "destroy") {
+						return kendo.stringify({ Products: data.models[0] });
+						}
+						}
+						*/
+                        
+						parameterMap: function (options) {
+							return JSON.stringify({ process: 'getcachedcontacts' });
+						}
 			
 			
 					},
