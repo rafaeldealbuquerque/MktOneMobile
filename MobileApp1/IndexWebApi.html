@@ -3,11 +3,7 @@
 	<head>
 		<title>Mobile App 1</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
 		<script src="cordova.js"></script>
-		<script src="Plugins/SQLite/SQLitePlugin.js"></script>
-		<script src="scripts/LocalStorage.js"></script>
 
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
@@ -35,7 +31,7 @@
 				<li>
 					<a href="#" data-action="viewModel.destroyProduct">Deletar</a>
 				</li>
-
+				
 			</ul>
 		</div>
 
@@ -116,49 +112,6 @@
 			</div>
 		</div>
 
-		<script>
-            
-			//add listener when device ready
-			document.addEventListener("deviceready", onDeviceReady, false);
-			var db = null;
-
-			if (window.sqlitePlugin !== undefined) {
-				db = window.sqlitePlugin.openDatabase("MobileMktOne");
-			}
-			else {
-				// For debugin in simulator fallback to native SQL Lite
-				console.log("Use built in SQL Lite");
-				db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
-			}
-            
-			//function will be called when device ready
-			function onDeviceReady() {
-				db.transaction(populateDB, errorCB, successCB);
-			}
-
-			//create table and insert some record
-			function populateDB(tx) {
-				tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
-			}
-
-			//function will be called when an error occurred
-			function errorCB(err) {
-				console.log("Error: " + err.message);
-			}
-			
-			//function will be called when process succeed
-			function successCB() {
-				console.log("Sucesso!");
-				db.transaction(queryDB, errorCB);
-			}
-			
-			//select all from SoccerPlayer
-			function queryDB(tx) {
-				tx.executeSql('SELECT * FROM Products', [], successCB, errorCB);
-			}
-			
-		</script>
-
 		<script type="text/javascript">
 			var app = new kendo.mobile.Application(),
 			validator,
@@ -170,35 +123,8 @@
 							url: crudServiceBaseUrl + "/Products",							
 							type:"GET"      
 							,contentType: "application/json"
-							,dataType: "json"							
+							,dataType: "json"
 						},
-			
-                        
-						/*
-						read: function(operation) {
-						var cashedData = localStorage.getItem("moviesData");
-			
-						if (cashedData != null || cashedData != undefined) {
-						//if local data exists load from it
-						operation.success(JSON.parse(cashedData));
-						}
-						else {
-						$.ajax({ //using jsfiddle's echo service to simulate remote data loading
-						url: crudServiceBaseUrl + "/Products",	
-						type:"GET"      
-						,contentType: "application/json"
-						,dataType: "json"	
-						,
-						success: function(response) {
-						//store response
-						localStorage.setItem("moviesData", JSON.stringify(response));
-						//pass the pass response to the DataSource
-						operation.success(response);
-						}
-						});
-						}                 
-						},
-						*/
 						update: {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"PUT"
@@ -206,7 +132,7 @@
 							,dataType: "json"
 						},
 						destroy: {
-			
+							
 							url: crudServiceBaseUrl + "/Products"                            
 							,type:"DELETE"
 							,contentType: "application/json"   
@@ -218,16 +144,58 @@
 							,contentType: "application/json"
 							,dataType: "json" 
 						},
+						
+						/*
+						parameterMap: function(data, operation) {
+						if (operation !== "read" && data.models) {
+						// post the products so the ASP.NET DefaultModelBinder will understand them:
+						// products[0].Name="name"
+						// products[0].ProductID =1
+						// products[1].Name="name"
+						// products[1].ProductID =1
+						var result = {};
 			
+						for (var i = 0; i < data.models.length; i++) {
+						var product = data.models[i];
 			
+						for (var member in product) {
+						result["products[" + i + "]." + member] = product[member];
+						}
+						}
+			
+						return result;
+						}
+						else {
+						return JSON.stringify(data)
+						}
+						}
+						*/
+						
+						
 						parameterMap: function(data, operation) {
 							if (operation !== "read" && data.models) {
 								return kendo.stringify([data.models[0]]);
 							}
 						}
-			
+						
+						/*		
+						parameterMap: function (data, operation) {
+						if (operation == "update" || operation == "create") {
+						if (data.models[0].ProductId == null && operation != "destroy") {
+						operation = "create";
+						}
+						else {
+						operation = "update";
+						}
+						return kendo.stringify([data.models[0]]);
+						}
+						else if (operation == "destroy") {
+						return kendo.stringify([data.models[0]]);
+						}
+						}
+						*/
 					},
-			
+                    
 					batch: true,
 					//pageSize: 5,
 					schema: { 

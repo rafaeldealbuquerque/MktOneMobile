@@ -1,0 +1,39 @@
+   
+#btnAdd, #btnCreate, #btnCancel, #btnBack
+{
+	display: block;
+	line-height: 2em;
+	text-align: center;
+}
+        
+#btnAdd
+{
+	margin: 2em;
+}
+        
+#btnCreate, #btnCancel
+{
+	margin: 1em auto 0 auto;
+	width: 80%;
+}
+        
+#btnCreate
+{
+	background-color: #00FF00;
+}
+        
+#btnCancel
+{
+	background-color: #FF0000;
+}
+        
+#btnBack
+{
+	margin: 2em auto;
+	width: 50%;
+}
+        
+.btnActions
+{
+	float: right;
+}
