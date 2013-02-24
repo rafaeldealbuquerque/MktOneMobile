@@ -61,6 +61,7 @@
     <Resource Include="App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="scripts\LocalStorage.js" />
     <Content Include="Testes\About.html" />
     <Content Include="Testes\ApiFunciona1.html" />
     <Content Include="Testes\HelloWorld.html" />
