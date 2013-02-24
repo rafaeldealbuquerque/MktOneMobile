@@ -4,8 +4,7 @@
 		<title>Mobile App 1</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-		<script src="cordova.js"></script>
+		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
@@ -170,7 +169,7 @@
 
 		<script type="text/javascript">
             
-			var app = new kendo.mobile.Application(),
+			var app = new kendo.mobile.Application(document.body),
 			validator,
 			crudServiceBaseUrl = "http://localhost:50000/api",            
 			viewModel = kendo.observable({
@@ -267,6 +266,8 @@
 			
 		</script>
 
+		<script type="text/javascript" charset="utf-8" src="Plugins/SQLite/SQLitePlugin.js"></script>
+		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
 	</body>
 
