@@ -5,6 +5,8 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+		<script src="cordova.js"></script>
+
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
 		<script src="kendo/js/jquery.min.js"></script>
@@ -167,57 +169,19 @@
 		</script>
 
 		<script type="text/javascript">
+            
 			var app = new kendo.mobile.Application(),
 			validator,
 			crudServiceBaseUrl = "http://localhost:50000/api",            
 			viewModel = kendo.observable({
 				dataSource: new kendo.data.DataSource({
 					transport: {
-                        
-						/*
-						read:  {
-						url: crudServiceBaseUrl + "/Products",							
-						type:"GET"      
-						,contentType: "application/json"
-						,dataType: "json"							
-						},
-						*/
-                        
-						
 						read:  {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"GET"      
 							,contentType: "application/json"
 							,dataType: "json"							
 						},
-						
-                        
-						/*
-						read: function(operation) {
-						var cashedData = getProducts();
-			
-						if (cashedData != null || cashedData != undefined) {
-						//if local data exists load from it
-						operation.success(JSON.parse(cashedData));
-						}
-						else {
-						$.ajax({ //using jsfiddle's echo service to simulate remote data loading
-						url: crudServiceBaseUrl + "/Products",	
-						type:"GET"      
-						,contentType: "application/json"
-						,dataType: "json"	
-						,
-						success: function(response) {
-						//store response
-						//localStorage.setItem("moviesData", JSON.stringify(response));
-						//pass the pass response to the DataSource
-						operation.success(response);
-						}
-						});
-						}                 
-						},
-						*/
-                        
 						update: {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"PUT"
@@ -237,16 +201,12 @@
 							,contentType: "application/json"
 							,dataType: "json" 
 						},
-			
-			
 						parameterMap: function(data, operation) {
 							if (operation !== "read" && data.models) {
 								return kendo.stringify([data.models[0]]);
 							}
 						}
-			
 					},
-			
 					batch: true,
 					//pageSize: 5,
 					schema: { 
@@ -307,9 +267,6 @@
 			
 		</script>
 
-		<script src="cordova.js"></script>
-		<script src="Plugins/SQLite/SQLitePlugin.js"></script>
-		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
 	</body>
 

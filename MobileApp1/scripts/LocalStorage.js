@@ -1,12 +1,12 @@
-
+    
 //Based on http://www.html5rocks.com/en/tutorials/webdatabase/todo/
-
+    
 document.addEventListener("deviceready", init, false);
-
+    
 var app = {};
-
+    
 app.db = null;
-      
+          
 app.openDb = function() {
 	if (window.sqlitePlugin !== undefined) {
 		app.db = window.sqlitePlugin.openDatabase("MobileMktOne");
@@ -17,14 +17,14 @@ app.openDb = function() {
 		app.db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
 	}
 }
-      
+          
 app.createTable = function() {
 	var db = app.db;
 	db.transaction(function(tx) {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
 	});
 }
-      
+          
 app.addTodo = function(productId, productName, unitPrice, discontinued, unitsInStock) {
 	var db = app.db;
 	db.transaction(function(tx) {		
@@ -34,15 +34,15 @@ app.addTodo = function(productId, productName, unitPrice, discontinued, unitsInS
 					  app.onError);
 	});
 }
-      
+          
 app.onError = function(tx, e) {
 	console.log("Error: " + e.message);
 } 
-      
+          
 app.onSuccess = function(tx, r) {
 	console.log("Sucesso");
 }
-      
+          
 app.deleteTodo = function(productId) {
 	var db = app.db;
 	db.transaction(function(tx) {
@@ -51,7 +51,7 @@ app.deleteTodo = function(productId) {
 					  app.onError);
 	});
 }
-
+    
 app.selectProduct = function() {
 	var db = app.db;
 	db.transaction(function(tx) {
@@ -60,18 +60,18 @@ app.selectProduct = function() {
 					  app.onError);
 	});
 }
-      
+          
 function init() {
 	app.openDb();
 	app.createTable();
 }
-      
+          
 function addTodo() {
 	var products = document.getElementById("todo");
 	app.addTodo(products.value);
 	products.value = "";
 }
-
+    
 function getProducts() {
-    app.selectProduct();
+	app.selectProduct();
 }

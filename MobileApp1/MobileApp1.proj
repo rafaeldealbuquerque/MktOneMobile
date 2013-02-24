@@ -35,7 +35,6 @@
     <Folder Include="App_Resources\Android\drawable-nodpi">
       <Platform>Android</Platform>
     </Folder>
-    <Folder Include="Testes" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App_Resources\iOS\icon.png" />
@@ -64,9 +63,6 @@
     <Content Include="IndexWebApi.html" />
     <Content Include="scripts\LocalStorage.js" />
     <Content Include="styles\mainWebApi.css" />
-    <Content Include="Testes\About.html" />
-    <Content Include="Testes\ApiFunciona1.html" />
-    <Content Include="Testes\HelloWorld.html" />
     <Content Include="index.html" />
     <Content Include="kendo\js\jquery.min.js" />
     <Content Include="kendo\js\kendo.all.min.js" />
