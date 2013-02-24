@@ -7,8 +7,7 @@
 
 		<script src="cordova.js"></script>
 		<script src="Plugins/SQLite/SQLitePlugin.js"></script>
-		<script src="scripts/LocalStorage.js"></script>
-
+		
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
 		<script src="kendo/js/jquery.min.js"></script>
@@ -165,7 +164,7 @@
 					return false;
 				}
 				// for an insert statement, this property will return the ID of the last inserted row
-				console.log("Last inserted row ProductID = " + results.insertId);
+				//console.log("Last inserted row ProductID = " + results.insertId);
 			}
             
 		</script>
@@ -177,37 +176,39 @@
 			viewModel = kendo.observable({
 				dataSource: new kendo.data.DataSource({
 					transport: {
+                        
+						
 						read:  {
-							url: crudServiceBaseUrl + "/Products",							
-							type:"GET"      
-							,contentType: "application/json"
-							,dataType: "json"							
+						url: crudServiceBaseUrl + "/Products",							
+						type:"GET"      
+						,contentType: "application/json"
+						,dataType: "json"							
 						},
-			
+						
                         
 						/*
 						read: function(operation) {
-						var cashedData = localStorage.getItem("moviesData");
+							var cashedData = queryDB();
 			
-						if (cashedData != null || cashedData != undefined) {
-						//if local data exists load from it
-						operation.success(JSON.parse(cashedData));
-						}
-						else {
-						$.ajax({ //using jsfiddle's echo service to simulate remote data loading
-						url: crudServiceBaseUrl + "/Products",	
-						type:"GET"      
-						,contentType: "application/json"
-						,dataType: "json"	
-						,
-						success: function(response) {
-						//store response
-						localStorage.setItem("moviesData", JSON.stringify(response));
-						//pass the pass response to the DataSource
-						operation.success(response);
-						}
-						});
-						}                 
+							if (cashedData != null || cashedData != undefined) {
+								//if local data exists load from it
+								operation.success(JSON.parse(cashedData));
+							}
+							else {
+								$.ajax({ //using jsfiddle's echo service to simulate remote data loading
+									url: crudServiceBaseUrl + "/Products",	
+									type:"GET"      
+									,contentType: "application/json"
+									,dataType: "json"	
+									,
+									success: function(response) {
+										//store response
+										localStorage.setItem("moviesData", JSON.stringify(response));
+										//pass the pass response to the DataSource
+										operation.success(response);
+									}
+								});
+							}                 
 						},
 						*/
 						update: {

@@ -1,3 +1,4 @@
+/*
 //Based on http://www.html5rocks.com/en/tutorials/webdatabase/todo/
 
 document.addEventListener("deviceready", init, false);
@@ -73,4 +74,4 @@ function addTodo() {
 
 function getProducts() {
     app.selectProduct();
-}
+}*/
