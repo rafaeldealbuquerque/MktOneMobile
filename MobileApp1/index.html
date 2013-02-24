@@ -5,9 +5,6 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-		<script src="cordova.js"></script>
-		<script src="Plugins/SQLite/SQLitePlugin.js"></script>
-		
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
 		<script src="kendo/js/jquery.min.js"></script>
@@ -115,58 +112,58 @@
 			</div>
 		</div>
 
-		<script>
-            
+		<script type="text/javascript">
+			/*
 			//add listener when device ready
 			document.addEventListener("deviceready", onDeviceReady, false);
 			var db = null;
 
 			if (window.sqlitePlugin !== undefined) {
-				db = window.sqlitePlugin.openDatabase("MobileMktOne");
+			db = window.sqlitePlugin.openDatabase("MobileMktOne");
 			}
 			else {
-				// For debugin in simulator fallback to native SQL Lite
-				console.log("Use built in SQL Lite");
-				db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
+			// For debugin in simulator fallback to native SQL Lite
+			console.log("Use built in SQL Lite");
+			db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
 			}
             
 			//function will be called when device ready
 			function onDeviceReady() {
-				db.transaction(populateDB, errorCB, successCB);
+			db.transaction(populateDB, errorCB, successCB);
 			}
 
 			//create table and insert some record
 			function populateDB(tx) {
-				tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
+			tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
 			}
 
 			//function will be called when an error occurred
 			function errorCB(err) {
-				console.log("Error: " + err.message);
+			console.log("Error: " + err.message);
 			}
 			
 			//function will be called when process succeed
 			function successCB() {
-				console.log("Sucesso!");
-				db.transaction(queryDB, errorCB);
+			console.log("Sucesso!");
+			db.transaction(queryDB, errorCB);
 			}
 			
 			//select all from SoccerPlayer
 			function queryDB(tx) {
-				tx.executeSql('SELECT * FROM Products', [], querySuccess, errorCB);
+			tx.executeSql('SELECT * FROM Products', [], querySuccess, errorCB);
 			}
             
 			function querySuccess(tx, results) {
-				console.log("Returned rows = " + results.rows.length);
-				// this will be true since it was a select statement and so rowsAffected was 0
-				if (!results.rowsAffected) {
-					console.log('No rows affected!');
-					return false;
-				}
-				// for an insert statement, this property will return the ID of the last inserted row
-				//console.log("Last inserted row ProductID = " + results.insertId);
+			console.log("Returned rows = " + results.rows.length);
+			// this will be true since it was a select statement and so rowsAffected was 0
+			if (!results.rowsAffected) {
+			console.log('No rows affected!');
+			return false;
 			}
-            
+			// for an insert statement, this property will return the ID of the last inserted row
+			//console.log("Last inserted row ProductID = " + results.insertId);
+			}
+			*/
 		</script>
 
 		<script type="text/javascript">
@@ -177,40 +174,50 @@
 				dataSource: new kendo.data.DataSource({
 					transport: {
                         
-						
+						/*
 						read:  {
 						url: crudServiceBaseUrl + "/Products",							
 						type:"GET"      
 						,contentType: "application/json"
 						,dataType: "json"							
 						},
+						*/
+                        
+						
+						read:  {
+							url: crudServiceBaseUrl + "/Products",							
+							type:"GET"      
+							,contentType: "application/json"
+							,dataType: "json"							
+						},
 						
                         
 						/*
 						read: function(operation) {
-							var cashedData = queryDB();
+						var cashedData = getProducts();
 			
-							if (cashedData != null || cashedData != undefined) {
-								//if local data exists load from it
-								operation.success(JSON.parse(cashedData));
-							}
-							else {
-								$.ajax({ //using jsfiddle's echo service to simulate remote data loading
-									url: crudServiceBaseUrl + "/Products",	
-									type:"GET"      
-									,contentType: "application/json"
-									,dataType: "json"	
-									,
-									success: function(response) {
-										//store response
-										localStorage.setItem("moviesData", JSON.stringify(response));
-										//pass the pass response to the DataSource
-										operation.success(response);
-									}
-								});
-							}                 
+						if (cashedData != null || cashedData != undefined) {
+						//if local data exists load from it
+						operation.success(JSON.parse(cashedData));
+						}
+						else {
+						$.ajax({ //using jsfiddle's echo service to simulate remote data loading
+						url: crudServiceBaseUrl + "/Products",	
+						type:"GET"      
+						,contentType: "application/json"
+						,dataType: "json"	
+						,
+						success: function(response) {
+						//store response
+						//localStorage.setItem("moviesData", JSON.stringify(response));
+						//pass the pass response to the DataSource
+						operation.success(response);
+						}
+						});
+						}                 
 						},
 						*/
+                        
 						update: {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"PUT"
@@ -299,6 +306,10 @@
 			}
 			
 		</script>
+
+		<script src="cordova.js"></script>
+		<script src="Plugins/SQLite/SQLitePlugin.js"></script>
+		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
 	</body>
 

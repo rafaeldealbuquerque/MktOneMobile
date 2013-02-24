@@ -1,4 +1,4 @@
-/*
+
 //Based on http://www.html5rocks.com/en/tutorials/webdatabase/todo/
 
 document.addEventListener("deviceready", init, false);
@@ -40,7 +40,7 @@ app.onError = function(tx, e) {
 } 
       
 app.onSuccess = function(tx, r) {
-	app.refresh();
+	console.log("Sucesso");
 }
       
 app.deleteTodo = function(productId) {
@@ -56,7 +56,7 @@ app.selectProduct = function() {
 	var db = app.db;
 	db.transaction(function(tx) {
 		tx.executeSql("SELECT * FROM Products", [], 
-					  render, 
+					  onSuccess, 
 					  app.onError);
 	});
 }
@@ -74,4 +74,4 @@ function addTodo() {
 
 function getProducts() {
     app.selectProduct();
-}*/
+}
