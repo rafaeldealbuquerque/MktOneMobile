@@ -179,7 +179,7 @@
 							url: crudServiceBaseUrl + "/Products",							
 							type:"GET"      
 							,contentType: "application/json"
-							,dataType: "json"							
+							,dataType: "json"                            
 						},
 						update: {
 							url: crudServiceBaseUrl + "/Products",							
@@ -204,9 +204,10 @@
 							if (operation !== "read" && data.models) {
 								return kendo.stringify([data.models[0]]);
 							}
-						}
+						},
+
 					},
-					batch: true,
+					batch: true,                    
 					//pageSize: 5,
 					schema: { 
 						model: {
@@ -263,9 +264,9 @@
 					}
 				}).data("kendoValidator");
 			}
-			
+		
 		</script>
-
+		
 		<script type="text/javascript" charset="utf-8" src="Plugins/SQLite/SQLitePlugin.js"></script>
 		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
