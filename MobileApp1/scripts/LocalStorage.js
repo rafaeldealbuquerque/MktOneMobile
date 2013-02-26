@@ -1,77 +1,75 @@
     
-//Based on http://www.html5rocks.com/en/tutorials/webdatabase/todo/
-    
 document.addEventListener("deviceready", init, false);
     
-var app = {};
+var appDB = {};
     
-app.db = null;
+appDB.db = null;
           
-app.openDb = function() {
+appDB.openDb = function() {
 	if (window.sqlitePlugin !== undefined) {
-		app.db = window.sqlitePlugin.openDatabase("MobileMktOne");
+		appDB.db = window.sqlitePlugin.openDatabase("MobileMktOne");
 	}
 	else {
 		// For debugin in simulator fallback to native SQL Lite
 		console.log("Use built in SQL Lite");
-		app.db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
+		appDB.db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
 	}
 }
           
-app.createTable = function() {
-	var db = app.db;
+appDB.createTable = function() {
+	var db = appDB.db;
 	db.transaction(function(tx) {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
 	});
 }
           
-app.addTodo = function(productId, productName, unitPrice, discontinued, unitsInStock) {
-	var db = app.db;
+appDB.addTodo = function(productId, productName, unitPrice, discontinued, unitsInStock) {
+	var db = appDB.db;
 	db.transaction(function(tx) {		
 		tx.executeSql("INSERT INTO Products(ProductId, ProductName, UnitPrice, Discontinued, UnitsInStock) VALUES (?,?,?,?,?)",
 					  [productId, productName, unitPrice, discontinued, unitsInStock],
-					  app.onSuccess,
-					  app.onError);
+					  appDB.onSuccess,
+					  appDB.onError);
 	});
 }
           
-app.onError = function(tx, e) {
+appDB.onError = function(tx, e) {
 	console.log("Error: " + e.message);
 } 
           
-app.onSuccess = function(tx, r) {
+appDB.onSuccess = function(tx, r) {
 	console.log("Sucesso");
 }
           
-app.deleteTodo = function(productId) {
-	var db = app.db;
+appDB.deleteTodo = function(productId) {
+	var db = appDB.db;
 	db.transaction(function(tx) {
 		tx.executeSql("DELETE FROM Products WHERE ID=?", [productId],
-					  app.onSuccess,
-					  app.onError);
+					  appDB.onSuccess,
+					  appDB.onError);
 	});
 }
     
-app.selectProduct = function() {
-	var db = app.db;
+appDB.selectProduct = function() {
+	var db = appDB.db;
 	db.transaction(function(tx) {
 		tx.executeSql("SELECT * FROM Products", [], 
 					  onSuccess, 
-					  app.onError);
+					  appDB.onError);
 	});
 }
           
 function init() {
-	app.openDb();
-	app.createTable();
+	appDB.openDb();
+	appDB.createTable();
 }
           
 function addTodo() {
 	var products = document.getElementById("todo");
-	app.addTodo(products.value);
+	appDB.addTodo(products.value);
 	products.value = "";
 }
     
 function getProducts() {
-	app.selectProduct();
+	appDB.selectProduct();
 }

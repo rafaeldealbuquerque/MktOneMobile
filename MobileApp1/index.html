@@ -4,7 +4,8 @@
 		<title>Mobile App 1</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+		<script src="cordova.js"></script>
 
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
@@ -114,60 +115,6 @@
 		</div>
 
 		<script type="text/javascript">
-			/*
-			//add listener when device ready
-			document.addEventListener("deviceready", onDeviceReady, false);
-			var db = null;
-
-			if (window.sqlitePlugin !== undefined) {
-			db = window.sqlitePlugin.openDatabase("MobileMktOne");
-			}
-			else {
-			// For debugin in simulator fallback to native SQL Lite
-			console.log("Use built in SQL Lite");
-			db = window.openDatabase("MobileMktOne", "1.0", "MobileAppMktOne", 200000);
-			}
-            
-			//function will be called when device ready
-			function onDeviceReady() {
-			db.transaction(populateDB, errorCB, successCB);
-			}
-
-			//create table and insert some record
-			function populateDB(tx) {
-			tx.executeSql("CREATE TABLE IF NOT EXISTS Products(ProductId INTEGER PRIMARY KEY ASC, ProductName TEXT, UnitPrice REAL, Discontinued INTEGER, UnitsInStock REAL)", []);
-			}
-
-			//function will be called when an error occurred
-			function errorCB(err) {
-			console.log("Error: " + err.message);
-			}
-			
-			//function will be called when process succeed
-			function successCB() {
-			console.log("Sucesso!");
-			db.transaction(queryDB, errorCB);
-			}
-			
-			//select all from SoccerPlayer
-			function queryDB(tx) {
-			tx.executeSql('SELECT * FROM Products', [], querySuccess, errorCB);
-			}
-            
-			function querySuccess(tx, results) {
-			console.log("Returned rows = " + results.rows.length);
-			// this will be true since it was a select statement and so rowsAffected was 0
-			if (!results.rowsAffected) {
-			console.log('No rows affected!');
-			return false;
-			}
-			// for an insert statement, this property will return the ID of the last inserted row
-			//console.log("Last inserted row ProductID = " + results.insertId);
-			}
-			*/
-		</script>
-
-		<script type="text/javascript">
             
 			var app = new kendo.mobile.Application(document.body),
 			validator,
@@ -266,7 +213,7 @@
 			}
 		
 		</script>
-		
+
 		<script type="text/javascript" charset="utf-8" src="Plugins/SQLite/SQLitePlugin.js"></script>
 		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
