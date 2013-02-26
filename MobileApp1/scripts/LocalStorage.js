@@ -27,7 +27,8 @@ appDB.addTodo = function(productId, productName, unitPrice, discontinued, unitsI
 	var db = appDB.db;
 	db.transaction(function(tx) {		
 		tx.executeSql("INSERT INTO Products(ProductId, ProductName, UnitPrice, Discontinued, UnitsInStock) VALUES (?,?,?,?,?)",
-					  [productId, productName, unitPrice, discontinued, unitsInStock],
+					  //[productId, productName, unitPrice, discontinued, unitsInStock],
+        [6, "Tt", 10, 1,"PQP"],
 					  appDB.onSuccess,
 					  appDB.onError);
 	});
@@ -62,6 +63,7 @@ appDB.selectProduct = function() {
 function init() {
 	appDB.openDb();
 	appDB.createTable();
+    
 }
           
 function addTodo() {

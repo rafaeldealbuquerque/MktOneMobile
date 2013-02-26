@@ -115,47 +115,59 @@
 		</div>
 
 		<script type="text/javascript">
-            
+                
 			var app = new kendo.mobile.Application(document.body),
 			validator,
 			crudServiceBaseUrl = "http://localhost:50000/api",            
 			viewModel = kendo.observable({
 				dataSource: new kendo.data.DataSource({
-					transport: {
+					transport: {						
 						read:  {
 							url: crudServiceBaseUrl + "/Products",							
 							type:"GET"      
 							,contentType: "application/json"
-							,dataType: "json"                            
+							,dataType: "json"
+							,
+							success: function(response) {
+                                
+                                console.log(response);
+								//store response
+								localStorage.setItem("moviesData", JSON.stringify(response));
+								//pass the pass response to the DataSource
+								operation.success(response);
+                                operation.Error(response);
+							}
+			
 						},
 						update: {
-							url: crudServiceBaseUrl + "/Products",							
+							url:crudServiceBaseUrl + "/Products",							
 							type:"PUT"
-							,contentType: "application/json"
+							,contentType:"application/json"
 							,dataType: "json"
 						},
 						destroy: {
-			
-							url: crudServiceBaseUrl + "/Products"                            
+							url:crudServiceBaseUrl + "/Products"                            
 							,type:"DELETE"
-							,contentType: "application/json"   
+							,contentType:"application/json"   
 							,dataType: "json"
 						},
 						create: {
-							url: crudServiceBaseUrl + "/Products"													
+							url:crudServiceBaseUrl + "/Products"													
 							,type:"POST"                            
-							,contentType: "application/json"
+							,contentType:"application/json"
 							,dataType: "json" 
 						},
 						parameterMap: function(data, operation) {
 							if (operation !== "read" && data.models) {
 								return kendo.stringify([data.models[0]]);
 							}
-						},
-
+						}
 					},
+					error: function(operation) {
+						console.log(operation);
+					},
+			
 					batch: true,                    
-					//pageSize: 5,
 					schema: { 
 						model: {
 							id: "ProductID",
@@ -168,13 +180,15 @@
 							} 
 						}
 					}
-				}),
+				})
+				,
 				addProduct: function() {
 					var newProduct = this.dataSource.add(); //adds a new data item to the DataSource
 					this.set("selectedProduct", newProduct); //sets the selected product
 					app.navigate("#editor"); //navigates to editor view
 				},
-				selectedProduct: {},
+				selectedProduct: {
+				},
 				saveProduct: function() {
 					if (validator.validate()) { //validates the input
 						this.dataSource.sync(); //synchronizes changes through the transport
@@ -211,13 +225,13 @@
 					}
 				}).data("kendoValidator");
 			}
-		
+			
 		</script>
 
-		<script type="text/javascript" charset="utf-8" src="Plugins/SQLite/SQLitePlugin.js"></script>
 		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
 
 	</body>
 
 </html>
 
+		
