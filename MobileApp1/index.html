@@ -10,7 +10,7 @@
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 
 		<script src="kendo/js/jquery.min.js"></script>
-		<script src="kendo/js/kendo.all.min.js"></script>
+		<script src="kendo/js/kendo.mobile.min.js"></script>
 
 		<link href="styles/main.css" rel="stylesheet" />
 
@@ -115,106 +115,124 @@
 		</div>
 
 		<script type="text/javascript">
-                
-			var app = new kendo.mobile.Application(document.body),
-			validator,
-			crudServiceBaseUrl = "http://localhost:50000/api",            
-			viewModel = kendo.observable({
-				dataSource: new kendo.data.DataSource({
-					transport: {						
-						read:  {
-							url: crudServiceBaseUrl + "/Products",							
-							type:"GET"      
-							,contentType: "application/json"
-							,dataType: "json"
-							,
-							success: function(response) {
-                                
-                                console.log(response);
-								//store response
-								localStorage.setItem("moviesData", JSON.stringify(response));
-								//pass the pass response to the DataSource
-								operation.success(response);
-                                operation.Error(response);
-							}
 			
-						},
-						update: {
-							url:crudServiceBaseUrl + "/Products",							
-							type:"PUT"
-							,contentType:"application/json"
-							,dataType: "json"
-						},
-						destroy: {
-							url:crudServiceBaseUrl + "/Products"                            
-							,type:"DELETE"
-							,contentType:"application/json"   
-							,dataType: "json"
-						},
-						create: {
-							url:crudServiceBaseUrl + "/Products"													
-							,type:"POST"                            
-							,contentType:"application/json"
-							,dataType: "json" 
-						},
-						parameterMap: function(data, operation) {
-							if (operation !== "read" && data.models) {
-								return kendo.stringify([data.models[0]]);
-							}
-						}
-					},
-					error: function(operation) {
-						console.log(operation);
-					},
-			
-					batch: true,                    
-					schema: { 
-						model: {
-							id: "ProductID",
-							fields: {
-								ProductId: { editable: false, nullable: true },
-								ProductName: { validation: { required: true} },
-								UnitPrice: { type: "number", validation: { required: true, min: 1, max: 999} },
-								Discontinued: { type: "boolean" },
-								UnitsInStock: { type: "number", validation: { min: 0, required: true} }
-							} 
-						}
-					}
-				})
-				,
-				addProduct: function() {
-					var newProduct = this.dataSource.add(); //adds a new data item to the DataSource
-					this.set("selectedProduct", newProduct); //sets the selected product
-					app.navigate("#editor"); //navigates to editor view
-				},
-				selectedProduct: {
-				},
-				saveProduct: function() {
-					if (validator.validate()) { //validates the input
-						this.dataSource.sync(); //synchronizes changes through the transport
-						app.navigate("#main"); //navigates to main view
-					}
-				},
-				cancelChanges: function() {
-					this.dataSource.cancelChanges(); //cancels the changes made to the DataSource after the last sync
-					app.navigate("#main"); //navigates to main view
-				},
-				editProduct: function(e) {
-					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
-					viewModel.set("selectedProduct", product);  //sets the selected product
-					app.navigate("#editor"); //navigates to editor view
-				},
-				destroyProduct: function(e) {
-					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
-					viewModel.dataSource.remove(product); //removes the product from the DataSource
-					viewModel.dataSource.sync(); //synchronizes changes through the transport
-				},
-				showDetails: function(e) {
-					var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
-					viewModel.set("selectedProduct", product); //sets the selected product
-					app.navigate("#details"); //navigates to details view
+			var app;
+            
+			//schema
+			var schema = { 
+				model: {
+					id: "ProductID",
+					fields: {
+						ProductId: { editable: false, nullable: true },
+						ProductName: { validation: { required: true} },
+						UnitPrice: { type: "number", validation: { required: true, min: 1, max: 999} },
+						Discontinued: { type: "boolean" },
+						UnitsInStock: { type: "number", validation: { min: 0, required: true} }
+					} 
 				}
-			});
+			};
+            
+			//Url
+			var baseUrl = "http://localhost:50000/api";
+            
+			//dataSource
+			var dataSource = new kendo.data.DataSource({                    
+				transport: {						
+					read:  {
+						url: baseUrl + "/Products",							
+						type:"GET"      
+						,contentType: "application/json"
+						,dataType: "json"
+					},
+					update: {
+						url:baseUrl + "/Products",							
+						type:"PUT"
+						,contentType:"application/json"
+						,dataType: "json"
+					},
+					destroy: {
+						url:baseUrl + "/Products"                            
+						,type:"DELETE"
+						,contentType:"application/json"   
+						,dataType: "json"
+					},
+					create: {
+						url:baseUrl + "/Products"													
+						,type:"POST"                            
+						,contentType:"application/json"
+						,dataType: "json" 
+					},
+					parameterMap: function(data, operation) {
+						if (operation !== "read" && data.models) {
+							return kendo.stringify([data.models[0]]);
+						}
+					}
+				},                    
+				sort: { field: "UnitPrice", dir: "desc" },
+				change: function (e) {
+					//	console.log(e.sender);
+					//console.log(viewModel.selectedProduct);
+				},
+			
+				error: function(e) {
+					console.log(e.xhr); //jqXHR
+					console.log(e.status); //textStatus
+					console.log(e.errorThrown); //errorThrown
+					console.log(e.sender); //the dataSource client object
+					console.log(arguments);
+				},
+				batch: true,                    
+				schema: schema
+			})
+			
+			function addProduct(e) {
+				var newProduct = this.dataSource.add(); //adds a new data item to the DataSource
+				this.set("selectedProduct", newProduct); //sets the selected product
+				app.navigate("#editor"); //navigates to editor view
+			}
+            
+			function saveProduct (e) {
+				if (validator.validate()) { //validates the input
+					//Sincroniza com o WebService
+					this.dataSource.sync(); //synchronizes changes through the transport
+			
+					//Sincroniza com o Banco de dados Local.
+					
+					if (this.selectedProduct.ProductID == "") {						
+						appDB.addTodo((this.selectedProduct.ProductID == "" ? 0 : this.selectedProduct.ProductID)+ 1, this.selectedProduct.ProductName, this.selectedProduct.UnitPrice, this.selectedProduct.Discontinued, this.selectedProduct.UnitsInStock);    
+					}
+					else {
+						appDB.updateTodo(this.selectedProduct.ProductId, this.selectedProduct.ProductName, this.selectedProduct.UnitPrice, this.selectedProduct.Discontinued, this.selectedProduct.UnitsInStock);    
+					}
+			
+					app.navigate("#main"); //navigates to main view
+				}
+			}
+			
+			function cancelChanges (e) {
+				this.dataSource.cancelChanges(); //cancels the changes made to the DataSource after the last sync
+				app.navigate("#main"); //navigates to main view
+			}
+			
+			function editProduct(e) {
+				var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+				viewModel.set("selectedProduct", product);  //sets the selected product
+				app.navigate("#editor"); //navigates to editor view
+			}
+			
+			function destroyProduct(e) {
+				var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+				viewModel.dataSource.remove(product); //removes the product from the DataSource
+				viewModel.dataSource.sync(); //synchronizes changes through the transport
+			
+				appDB.deleteTodo(this.selectedProduct.ProductId);
+			}
+			
+			function showDetails(e) {
+				var product = viewModel.dataSource.get(e.context); //gets the ActionSheet context
+				viewModel.set("selectedProduct", product); //sets the selected product
+				app.navigate("#details"); //navigates to details view
+			}
 			
 			function editorViewInit(e) {
 				validator = $("#form").kendoValidator({ //initialize the validator
@@ -226,12 +244,36 @@
 				}).data("kendoValidator");
 			}
 			
+			//Inicia a APP e informa quais objetos serão observados pelo ViewModel
+			var app = new kendo.mobile.Application($(document.body)),
+			validator,			           
+			viewModel = kendo.observable({
+				dataSource: dataSource,				            
+				addProduct: addProduct,                
+				selectedProduct: {},
+				saveProduct: saveProduct ,
+				cancelChanges: cancelChanges,
+				editProduct: editProduct,
+				destroyProduct: destroyProduct,
+				showDetails: showDetails
+			}
+			);
+			
 		</script>
-
+		
 		<script type="text/javascript" charset="utf-8" src="scripts/LocalStorage.js"></script>
-
+		
+		<script>
+		
+			function insertLog(e) {
+				//addTodo();
+				console.log(e);
+			}
+			
+			
+		</script>
+		
 	</body>
-
+	
 </html>
 
-		
